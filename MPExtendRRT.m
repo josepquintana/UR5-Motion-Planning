@@ -40,7 +40,6 @@ function [JointTrajectory, JointTrajectory_smooth] = MPExtendRRT(C_ini, C_goal, 
         end
 
         n      = size(mp.nodes,1);
-
         for k = 1:n
             %calculate distance
             d = norm(sto - mp.nodes(k, :));

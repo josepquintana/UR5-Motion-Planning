@@ -26,16 +26,66 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
     MPInitialize(C_ini);
     ParaInitialize(C_ini, C_goal, Obs);
 
-    iter = 0;
-    dmin   = Inf;
-    vid    = -1;
+    p1 = [0 0 0.15 1]';
+    %p2 = [0 0 0]
     
+    iter = 0;
+    dstep     = params.distOneStep;
+    vid       = -1;
+    nrLinks   = 6;
+    d         = norm(C_curr);
+    u         = dstep * C_curr / d;
+    nrSteps = 10; %ceil(d / dstep);
 
+
+    dhgoal = DHTransformation(C_goal, 6);
+    
+    
+    while mp.vidAtGoal <= 0 && iter < params.maxiteration
+        for i = 1:nrLinks
+            for j = 1:i
+               %Jacobian... 
+            end
+        end
+        
+        
+        if i == nrLinks
+            dhvid  = DHTransformation(mp.nodes(vid, :), 6);
+            pp = dhvid*p;
+            d = dhgoal - dhvid;
+            
+        end
+        
+        for k = 1:nrSteps
+            params.robot = mp.nodes(vid, :) + u;
+            if IsValidState() == 0
+                return;
+            end
+            n                     = size(mp.nodes,1);
+            mp.nchildren(vid)     = mp.nchildren(vid) + 1;
+            mp.nodes(n + 1, :)    = params.robot;
+            mp.parents(n + 1)     = vid;
+            mp.nchildren(n + 1)   = 0;
+
+            if HasRobotReachedGoal() == 1
+                mp.vidAtGoal = n + 1;
+                return;
+            end
+            vid = n + 1;
+        end 
+        iter = iter + 1;
+    end
 
     if mp.vidAtGoal >= 1
         JointTrajectory  = MPGetPath();
         JointTrajectory_smooth = SmoothPath(JointTrajectory);
     end
-    size(mp.nodes)
     Draw(JointTrajectory_smooth);
+    
+    function [jacx, jacy, jacz] = Jacobian(linkStart, linkEnd)
+        [ex, ey] = simulator.GetLinkEnd(j);
+        [sx, sy] = simulator.GetLinkStart(thetai);
+        jacy =  ex - sx;
+        jacx = -ey + sy;
+    end
 end
