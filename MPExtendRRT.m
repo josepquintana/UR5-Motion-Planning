@@ -32,7 +32,6 @@ function [JointTrajectory, JointTrajectory_smooth] = MPExtendRRT(C_ini, C_goal, 
     vid    = -1;
     
     while mp.vidAtGoal <= 0 && iter < params.maxiteration
-
         % Implement the extension of the RRT algorithm inside while loop here ...
         if rand() < .2
             sto = params.goal;
@@ -43,19 +42,19 @@ function [JointTrajectory, JointTrajectory_smooth] = MPExtendRRT(C_ini, C_goal, 
         n      = size(mp.nodes,1);
 
         for k = 1:n
+            %calculate distance
             d = norm(sto - mp.nodes(k, :));
-            norm(sto - C_ini);
-            norm(C_goal - sto);
             
-            %d = (sto(1) - mp.xpts(k))^2 + (sto(2) - mp.ypts(k))^2;
             if d < dmin
+                %find a good node
                 dmin = d;
                 vid  = k;
             end
         end 
         MPExtendTree(vid, sto);
         %increase the iteration
-        iter = iter + 1; 
+        iter = iter + 1;
+        %display iteration
         if mod(iter, 50) == 0
             fprintf('Iteration = %g\n', iter);
         end
@@ -63,20 +62,31 @@ function [JointTrajectory, JointTrajectory_smooth] = MPExtendRRT(C_ini, C_goal, 
 
     if mp.vidAtGoal >= 1
         JointTrajectory  = MPGetPath();
+        %smooth the generated path
         JointTrajectory_smooth = SmoothPath(JointTrajectory);
+        %output the output moves
+        OutputMoves(JointTrajectory_smooth);
+        %display the final result
+        Draw(JointTrajectory_smooth);
     end
-    
+end
+
+function OutputMoves (JointTrajectory_smooth)
+    %this method outputs a file with all the moves for UR software
+    %open the file
     file = fopen('MPExtendRRT.script', 'w');
+    %output frames from begin to end
     for key=1:size(JointTrajectory_smooth,1)
-        fprintf(file, 'movej([%g, %g, %g, %g, %g, %g], a=1, v=1, t=0, r=0)\n', JointTrajectory_smooth(key, 1), JointTrajectory_smooth(key, 2), JointTrajectory_smooth(key, 3), JointTrajectory_smooth(key, 4), JointTrajectory_smooth(key, 5), JointTrajectory_smooth(key, 6));
+    	fprintf(file, 'movej([%g, %g, %g, %g, %g, %g], a=1, v=1, t=0, r=0)\n', JointTrajectory_smooth(key, 1), JointTrajectory_smooth(key, 2), JointTrajectory_smooth(key, 3), JointTrajectory_smooth(key, 4), JointTrajectory_smooth(key, 5), JointTrajectory_smooth(key, 6));
     end
+    %wait for 2 seconds
     fprintf(file, 'sleep(2.0)\n');
+    %output frames from end to begin (backwards)
     for key=size(JointTrajectory_smooth,1):-1:1
         fprintf(file, 'movej([%g, %g, %g, %g, %g, %g], a=1, v=1, t=0, r=0)\n', JointTrajectory_smooth(key, 1), JointTrajectory_smooth(key, 2), JointTrajectory_smooth(key, 3), JointTrajectory_smooth(key, 4), JointTrajectory_smooth(key, 5), JointTrajectory_smooth(key, 6));
     end
+    %wait for 2 seconds
     fprintf(file, 'sleep(2.0)\n');
+    %close the file
     fclose(file);
-    
-    Draw(JointTrajectory_smooth);
 end
-
