@@ -49,6 +49,7 @@ function [JointTrajectory, JointTrajectory_smooth] = MPExtendRRT(C_ini, C_goal, 
             end
         end 
         MPExtendTree(vid, sto);
+        %increase the iteration
         iter = iter + 1; 
         if mod(iter, 50) == 0
             fprintf('Iteration = %g\n', iter);
@@ -72,6 +73,5 @@ function [JointTrajectory, JointTrajectory_smooth] = MPExtendRRT(C_ini, C_goal, 
     fclose(file);
     
     Draw(JointTrajectory_smooth);
-    
 end
 
