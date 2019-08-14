@@ -7,9 +7,9 @@ global params;
 params.robot        = C_ini;
 params.goal         = C_goal;
 params.obstacles    = Obs;
-params.distOneStep  = 0.05;              % the step size in MPExtendTree
-params.goaltolerance= 0.1;             % the goal tolerance is used to check if the configuration is close enough to the goal configuration
-params.maxiteration = 10000;            % the maximum iterations number for the algorithm
+params.distOneStep  = 0.075;            % the step size in MPExtendTree
+params.goaltolerance= 0.1;              % the goal tolerance is used to check if the configuration is close enough to the goal configuration
+params.maxiteration = 15000;            % the maximum iterations number for the algorithm
 params.smoothiters  = 200;              % the maximum iternation number for the post-processing in SmoothPath
 params.ur5_kin      = UR5Kinematics();
 
