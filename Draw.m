@@ -39,7 +39,7 @@ JointTrajectory_ext_all = [JointTrajectory_ext_all; JointTrajectory(end,:)];
 
 [m_all ,~] = size(JointTrajectory_ext_all);
 
-sim_num = 3;
+sim_num = 1;
 
 for loop = 1:sim_num
     

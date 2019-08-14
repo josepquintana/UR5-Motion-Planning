@@ -64,8 +64,19 @@ function [JointTrajectory, JointTrajectory_smooth] = MPExtendRRT(C_ini, C_goal, 
         JointTrajectory  = MPGetPath();
         JointTrajectory_smooth = SmoothPath(JointTrajectory);
     end
-    size(mp.nodes)
+    
+    file = fopen('MPExtendRRT.script', 'w');
+    for key=1:size(JointTrajectory_smooth,1)
+        fprintf(file, 'movej([%g, %g, %g, %g, %g, %g], a=1, v=1, t=0, r=0)\n', JointTrajectory_smooth(key, 1), JointTrajectory_smooth(key, 2), JointTrajectory_smooth(key, 3), JointTrajectory_smooth(key, 4), JointTrajectory_smooth(key, 5), JointTrajectory_smooth(key, 6));
+    end
+    fprintf(file, 'sleep(2.0)\n');
+    for key=size(JointTrajectory_smooth,1):-1:1
+        fprintf(file, 'movej([%g, %g, %g, %g, %g, %g], a=1, v=1, t=0, r=0)\n', JointTrajectory_smooth(key, 1), JointTrajectory_smooth(key, 2), JointTrajectory_smooth(key, 3), JointTrajectory_smooth(key, 4), JointTrajectory_smooth(key, 5), JointTrajectory_smooth(key, 6));
+    end
+    fprintf(file, 'sleep(2.0)\n');
+    fclose(file);
+    
     Draw(JointTrajectory_smooth);
-
+    
 end
 
