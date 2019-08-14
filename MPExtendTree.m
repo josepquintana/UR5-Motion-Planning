@@ -19,6 +19,7 @@ function [] = MPExtendTree(vid, sto)
     % necessary information
 
     % Add your code here ...
+    
     dstep     = params.distOneStep;
     C_curr    = sto - mp.nodes(vid, :);
     d         = norm(C_curr);
@@ -28,8 +29,9 @@ function [] = MPExtendTree(vid, sto)
     for k = 1:nrSteps
         params.robot = mp.nodes(vid, :) + u;
         if IsValidState() == 0
-            %return;
+            return;
         end
+        
         n                     = size(mp.nodes,1);
         mp.nchildren(vid)     = mp.nchildren(vid) + 1;
         mp.nodes(n + 1, :)    = params.robot;
