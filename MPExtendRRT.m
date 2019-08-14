@@ -41,13 +41,8 @@ function [JointTrajectory, JointTrajectory_smooth] = MPExtendRRT(C_ini, C_goal, 
         end
 
         n      = size(mp.nodes,1);
-
         for k = 1:n
             d = norm(sto - mp.nodes(k, :));
-            norm(sto - C_ini);
-            norm(C_goal - sto);
-            
-            %d = (sto(1) - mp.xpts(k))^2 + (sto(2) - mp.ypts(k))^2;
             if d < dmin
                 dmin = d;
                 vid  = k;
