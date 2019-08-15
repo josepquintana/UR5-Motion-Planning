@@ -9,6 +9,8 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
 % the capsule (diemsion: 1*3 unit: meter), r is the radius of the capsule
 % (scalar, unit: meter)
 
+    
+    syms Q1 Q2 Q3 Q4 Q5 Q6
     % please define all these three inputs before runing this main function
     global mp;
     global params;
@@ -26,22 +28,18 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
     MPInitialize(C_ini);
     ParaInitialize(C_ini, C_goal, Obs);
 
-    p1 = [0 0 0.15 1]';
+    p = [0 0 0.15 1]';
     %p2 = [0 0 0]
     
-    iter = 0;
+    
+    iter      = 1;
     dstep     = params.distOneStep;
-    vid       = -1;
+    vid       = 1;
     nrLinks   = 6;
-    d         = norm(C_curr);
-    u         = dstep * C_curr / d;
-    nrSteps = 10; %ceil(d / dstep);
-
-
     dhgoal = DHTransformation(C_goal, 6);
-    
-    
-    while mp.vidAtGoal <= 0 && iter < params.maxiteration
+    dhgoal = dhgoal(1:3,4);
+        
+    while mp.vidAtGoal <= 0 && iter <= params.maxiteration
         for i = 1:nrLinks
             for j = 1:i
                %Jacobian... 
@@ -49,13 +47,16 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
         end
         
         
-        if i == nrLinks
-            dhvid  = DHTransformation(mp.nodes(vid, :), 6);
-            pp = dhvid*p;
-            d = dhgoal - dhvid;
-            
-        end
+        dhvid  = DHTransformation(mp.nodes(vid, :), 6);
+        pp = dhvid*p;
+        J = Jacobian(pp, mp.nodes(vid, :));
+        d = dhgoal - pp;
+        d = d/norm(d);
+        u = J'*d
+        u = d/norm(d)*dstep;
+        params.robot = mp.nodes(vid, :) + u; % New configuration
         
+        %%%%%%%
         for k = 1:nrSteps
             params.robot = mp.nodes(vid, :) + u;
             if IsValidState() == 0
@@ -72,7 +73,8 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
                 return;
             end
             vid = n + 1;
-        end 
+        end
+        %%%%%%%%%%%
         iter = iter + 1;
     end
 
@@ -82,10 +84,11 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
     end
     Draw(JointTrajectory_smooth);
     
-    function [jacx, jacy, jacz] = Jacobian(linkStart, linkEnd)
-        [ex, ey] = simulator.GetLinkEnd(j);
-        [sx, sy] = simulator.GetLinkStart(thetai);
-        jacy =  ex - sx;
-        jacx = -ey + sy;
+    
+    function J = Jacobian(P, theta)
+        J = [diff(P, Q1) diff(P, Q2) diff(P, Q3) diff(P, Q4) diff(P, Q5) diff(P, Q6)];
+        J = double(subs(J,[Q1 Q2 Q3 Q4 Q5 Q6], [theta(1) theta(2) theta(3) theta(4) theta(5) theta(6)]));
     end
+    
+    
 end
