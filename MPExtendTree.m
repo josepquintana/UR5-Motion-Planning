@@ -29,9 +29,11 @@ function [] = MPExtendTree(vid, sto)
     for k = 1:nrSteps
         params.robot = mp.nodes(vid, :) + u;
         if IsValidState() == 0
+            %UR robot configuration is not valid
             return;
         end
         
+        %save this new node
         n                     = size(mp.nodes,1);
         mp.nchildren(vid)     = mp.nchildren(vid) + 1;
         mp.nodes(n + 1, :)    = params.robot;
@@ -39,6 +41,7 @@ function [] = MPExtendTree(vid, sto)
         mp.nchildren(n + 1)   = 0;
 
         if HasRobotReachedGoal() == 1
+            %robot has reached goal
             mp.vidAtGoal = n + 1;
             return;
         end

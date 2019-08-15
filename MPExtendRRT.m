@@ -34,8 +34,10 @@ function [JointTrajectory, JointTrajectory_smooth] = MPExtendRRT(C_ini, C_goal, 
     while mp.vidAtGoal <= 0 && iter < params.maxiteration
         % Implement the extension of the RRT algorithm inside while loop here ...
         if rand() < .2
+            %try goal
             sto = params.goal;
         else
+            %generate random point instead
             sto = SampleState();
         end
 
