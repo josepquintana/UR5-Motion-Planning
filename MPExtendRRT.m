@@ -66,7 +66,7 @@ function [JointTrajectory, JointTrajectory_smooth] = MPExtendRRT(C_ini, C_goal, 
         %smooth the generated path
         JointTrajectory_smooth = SmoothPath(JointTrajectory);
         %output the output moves
-        OutputMovesForUR(JointTrajectory_smooth);
+        OutputMovesForUR(JointTrajectory_smooth, 'MPExtendRRT.script');
         %display the final result
         Draw(JointTrajectory_smooth);
     end

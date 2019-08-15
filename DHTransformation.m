@@ -1,10 +1,9 @@
 function T = DHTransformation(Qrobot, t)
-    %syms Q1 Q2 Q3 Q4 Q5 Q6
-    %alphaa=[90, 0, 0, 90, -90, 0]; % this is the alpha value for all  the link
+    syms Q1 Q2 Q3 Q4 Q5 Q6
     alphaa=[90, 0, 0, 90, -90, 0]; % this is the alpha value for all the links
     a=[0, -0.425, -0.39225, 0, 0, 0]; % Length of the Link
     d=[0.8916, 0, 0, 0.10915, 0.09456, 0.0823]; %Offset
-    Q=Qrobot; % joint angle variation
+    Q=[Q1 Q2 Q3 Q4 Q5 Q6]; % joint angle variation
     %%Transformation Matrices
     for i=1:6
         switch i
