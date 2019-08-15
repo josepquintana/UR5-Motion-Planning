@@ -39,7 +39,7 @@ params.Q5max        = 90 * pi / 180;
 params.Q6min        = -90 * pi / 180;
 params.Q6max        = 90 * pi / 180; 
 %}
-
+%{
 params.Q1min        = - (180 - 22.5) * pi / 180;
 params.Q1max        = (22.5 + 180) * pi / 180;
 params.Q2min        = -pi;
@@ -52,22 +52,22 @@ params.Q5min        = -180 * pi / 180;
 params.Q5max        = 180 * pi / 180;
 params.Q6min        = -180 * pi / 180;
 params.Q6max        = 180 * pi / 180;
-
-
-%{
-params.Q1min        = -3.14;
-params.Q1max        = 3.14;
-params.Q2min        = -pi;
-params.Q2max        = -pi;
-params.Q3min        = -pi;
-params.Q3max        = pi;
-params.Q4min        = -pi;
-params.Q4max        = -pi;
-params.Q5min        = -pi;
-params.Q5max        = pi;
-params.Q6min        = -pi;
-params.Q6max        = pi;
 %}
+
+
+params.Q1min        = -2*pi;
+params.Q1max        = 2*pi;
+params.Q2min        = -2*pi;
+params.Q2max        = pi;
+params.Q3min        = -2*pi;
+params.Q3max        = 2*pi;
+params.Q4min        = -2*pi;
+params.Q4max        = 2*pi;
+params.Q5min        = -2*pi;
+params.Q5max        = 2*pi;
+params.Q6min        = -2*pi;
+params.Q6max        = 2*pi;
+
 
 end
 
