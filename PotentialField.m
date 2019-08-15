@@ -13,6 +13,7 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
     % please define all these three inputs before runing this main function
     global mp;
     global params;
+    syms Q1 Q2 Q3 Q4 Q5 Q6
 
     JointTrajectory = []; 
     JointTrajectory_smooth = [];
@@ -36,37 +37,36 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
     vid       = 1;
     nrLinks   = 6;
     dhgoal = DHTransformation(C_goal, 6);
-    dhgoal = dhgoal(1:3,4);
+    %G = subs(dhgoal, [Q1 Q2 Q3 Q4 Q5 Q6], params.goal);
+    dhgoal = dhgoal(1:3,4)
         
     while mp.vidAtGoal <= 0 && iter <= params.maxiteration
-        for i = 1:nrLinks
-            for j = 1:i
+        %for i = 1:nrLinks
+         %   for j = 1:i
                %Jacobian... 
-            end
-        end
+          %  end
+        %end
         
         
         dhvid  = DHTransformation(mp.nodes(vid, :), 6);
-        pp = dhvid*p; %% 6x4 · 4x1
+        pp = dhvid*p;
+        pp = pp(1:3)
         
-        
-        
-        syms Q1 Q2 Q3 Q4 Q5 Q6
+                
         J = [diff(pp, Q1) diff(pp, Q2) diff(pp, Q3) diff(pp, Q4) diff(pp, Q5) diff(pp, Q6)];
-        J = double(subs(J,[Q1 Q2 Q3 Q4 Q5 Q6], mp.nodes(vid, :)));
+        J = double(subs(J,[Q1 Q2 Q3 Q4 Q5 Q6], mp.nodes(vid, :)))
         
-        J
-        
+              
         
         
         %J = Jacobian(pp, mp.nodes(vid, :));
-        d = dhgoal - pp;
+        sad = G - pp;
         d = d/norm(d);
-        u = J'*d
-        u = d/norm(d)*dstep;
-        params.robot = mp.nodes(vid, :) + u; % New configuration
+        u = J'*d;
+        u = u/norm(u)*dstep;
+        params.robot = mp.nodes(vid, :) + u'; % New configuration
         
-        %%%%%%%
+        %{
         for k = 1:nrSteps
             params.robot = mp.nodes(vid, :) + u;
             if IsValidState() == 0
@@ -84,7 +84,7 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
             end
             vid = n + 1;
         end
-        %%%%%%%%%%%
+        %}
         iter = iter + 1;
     end
 
