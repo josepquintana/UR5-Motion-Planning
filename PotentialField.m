@@ -10,7 +10,6 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
 % (scalar, unit: meter)
 
     
-    syms Q1 Q2 Q3 Q4 Q5 Q6
     % please define all these three inputs before runing this main function
     global mp;
     global params;
@@ -48,8 +47,19 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
         
         
         dhvid  = DHTransformation(mp.nodes(vid, :), 6);
-        pp = dhvid*p;
-        J = Jacobian(pp, mp.nodes(vid, :));
+        pp = dhvid*p; %% 6x4 · 4x1
+        
+        
+        
+        syms Q1 Q2 Q3 Q4 Q5 Q6
+        J = [diff(pp, Q1) diff(pp, Q2) diff(pp, Q3) diff(pp, Q4) diff(pp, Q5) diff(pp, Q6)];
+        J = double(subs(J,[Q1 Q2 Q3 Q4 Q5 Q6], mp.nodes(vid, :)));
+        
+        J
+        
+        
+        
+        %J = Jacobian(pp, mp.nodes(vid, :));
         d = dhgoal - pp;
         d = d/norm(d);
         u = J'*d
@@ -85,10 +95,11 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
     Draw(JointTrajectory_smooth);
     
     
-    function J = Jacobian(P, theta)
-        J = [diff(P, Q1) diff(P, Q2) diff(P, Q3) diff(P, Q4) diff(P, Q5) diff(P, Q6)];
-        J = double(subs(J,[Q1 Q2 Q3 Q4 Q5 Q6], [theta(1) theta(2) theta(3) theta(4) theta(5) theta(6)]));
-    end
+    %function J = Jacobian(P, theta)
+     %   syms Q1 Q2 Q3 Q4 Q5 Q6
+      %  J = [diff(P, Q1) diff(P, Q2) diff(P, Q3) diff(P, Q4) diff(P, Q5) diff(P, Q6)];
+      %  J = double(subs(J,[Q1 Q2 Q3 Q4 Q5 Q6], [theta(1) theta(2) theta(3) theta(4) theta(5) theta(6)]));
+   % end
     
     
 end
