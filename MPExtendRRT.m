@@ -33,7 +33,7 @@ function [JointTrajectory, JointTrajectory_smooth] = MPExtendRRT(C_ini, C_goal, 
     
     while mp.vidAtGoal <= 0 && iter < params.maxiteration
         % Implement the extension of the RRT algorithm inside while loop here ...
-        if rand() < .2
+        if rand() < 0.3
             %try goal
             sto = params.goal;
         else
@@ -66,28 +66,8 @@ function [JointTrajectory, JointTrajectory_smooth] = MPExtendRRT(C_ini, C_goal, 
         %smooth the generated path
         JointTrajectory_smooth = SmoothPath(JointTrajectory);
         %output the output moves
-        OutputMoves(JointTrajectory_smooth);
+        OutputMovesForUR(JointTrajectory_smooth);
         %display the final result
         Draw(JointTrajectory_smooth);
     end
-end
-
-function OutputMoves (JointTrajectory_smooth)
-    %this method outputs a file with all the moves for UR software
-    %open the file
-    file = fopen('MPExtendRRT.script', 'w');
-    %output frames from begin to end
-    for key=1:size(JointTrajectory_smooth,1)
-    	fprintf(file, 'movej([%g, %g, %g, %g, %g, %g], a=1, v=1, t=0, r=0)\n', JointTrajectory_smooth(key, 1), JointTrajectory_smooth(key, 2), JointTrajectory_smooth(key, 3), JointTrajectory_smooth(key, 4), JointTrajectory_smooth(key, 5), JointTrajectory_smooth(key, 6));
-    end
-    %wait for 2 seconds
-    fprintf(file, 'sleep(2.0)\n');
-    %output frames from end to begin (backwards)
-    for key=size(JointTrajectory_smooth,1):-1:1
-        fprintf(file, 'movej([%g, %g, %g, %g, %g, %g], a=1, v=1, t=0, r=0)\n', JointTrajectory_smooth(key, 1), JointTrajectory_smooth(key, 2), JointTrajectory_smooth(key, 3), JointTrajectory_smooth(key, 4), JointTrajectory_smooth(key, 5), JointTrajectory_smooth(key, 6));
-    end
-    %wait for 2 seconds
-    fprintf(file, 'sleep(2.0)\n');
-    %close the file
-    fclose(file);
 end
