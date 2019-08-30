@@ -3,6 +3,8 @@ Implementation of two motion planning algorithms:
 	- Rapidly-exploring Random Tree (RRT)
 	- Potential Field
 
+The project report can be found [here](Report.pdf)
+
 ![image of simulation window](docs/image_2.png)
 	
 Both algorithms find collision-free paths for the UR5 robotic arm ([Universal Robots site](https://www.universal-robots.com/3d/ur5.html)) to perform pick-and-place tasks.
