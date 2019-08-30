@@ -9,7 +9,6 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
 % the capsule (diemsion: 1*3 unit: meter), r is the radius of the capsule
 % (scalar, unit: meter)
 
-    
     % please define all these three inputs before runing this main function
     global mp;
     global params;
@@ -42,7 +41,7 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
     while mp.vidAtGoal <= 0 && iter <= params.maxiteration
         %for i = 1:nrLinks
           %  for j = 1:i
-                ...
+            % ...
           %  end
         %end
                 
