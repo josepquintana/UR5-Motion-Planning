@@ -3,7 +3,7 @@ Implementation of two motion planning algorithms:
 	- Rapidly-exploring Random Tree (RRT)
 	- Potential Field
 
-![image of simulation window](docs/image2.png)
+![image of simulation window](docs/image_2.png)
 	
 Both algorithms find collision-free paths for the UR5 robotic arm ([Universal Robots site](https://www.universal-robots.com/3d/ur5.html)) to perform pick-and-place tasks.
 
@@ -20,7 +20,7 @@ movej([-0.83583, -2.1846, -1.08443, -1.11736, 1.62908, -1.02161], a=1, v=1, t=0,
 ...
 ```
 
-![image of real robot following the generated path](docs/image3.png)
+![image of real robot following the generated path](docs/image_3.png)
 
 [Video](https://josepquintana.me/files/videos/UR5/UR5%20robot%20motion%20planning%20-%20RRT%20algorithm.mp4) of the real UR5 robot following the generated path using the RRT algorithm
 
