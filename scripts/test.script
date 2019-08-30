@@ -1,0 +1,27 @@
+def unnamed():
+  set_safety_mode_transition_hardness(0)
+  set_tcp(p[0.0,0.0,0.317,0.0,0.0,0.0])
+  set_payload(1.2)
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 0)
+  set_analog_outputdomain(1, 0)
+  set_tool_voltage(24)
+  set_input_actions_to_default()
+  set_gravity([0.0, 0.0, 9.82])
+  global i_var_2=p[0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000]
+  while (True):
+    $ 2 "MoveJ"
+    $ 3 "Waypoint_1"
+    movej(get_inverse_kin(p[.000259266106, -.509461933707, .601132560641, .000727236034, -2.221719116192, 2.220994404735], qnear=[-0.08107930818666631, -0.888315502797262, -1.4715870062457483, 2.3425068855285645, -0.07980186143984014, -3.1244877020465296]), a=1.3962634015954636, v=1.0471975511965976)
+    $ 4 "Wait: 2.0"
+    sleep(2.0)
+    $ 5 "MoveJ"
+    $ 6 "Waypoint_2"
+    movej(get_inverse_kin(p[.000206760540, -.509460074154, 1.001927577864, .000319092403, -2.221763142282, 2.221088634956], qnear=[-4.7985707418263246E-5, -1.5708320776568812, 3.5762786865234375E-5, -1.5708563963519495, -3.606477846318512E-5, -4.7985707418263246E-5]), a=1.3962634015954636, v=1.0471975511965976)
+    $ 7 "Wait: 2.0"
+    sleep(2.0)
+  end
+end

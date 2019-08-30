@@ -1,0 +1,3 @@
+while (not((modbus_get_signal_status("RI_WSG_STATE", False) ==4096) or (modbus_get_signal_status("RI_WSG_STATE", False) ==2048) or (modbus_get_signal_status("RI_WSG_STATE", False) ==1024))):
+  sync()
+end

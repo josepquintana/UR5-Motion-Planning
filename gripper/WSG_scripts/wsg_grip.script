@@ -1,0 +1,6 @@
+modbus_set_output_register("RO_WSG_WIDTH", i_WSG_Pos, False)
+modbus_set_output_register("RO_WSG_SPEED", i_WSG_Speed, False)
+modbus_set_output_register("RO_WSG_FORCELIM", i_WSG_Force, False)
+sleep(0.5)
+modbus_set_output_register("RO_WSG_CMDFLAGS", 512, False)
+sleep(0.2)

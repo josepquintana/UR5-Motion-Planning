@@ -1,0 +1,18 @@
+i_WSG_State = modbus_get_signal_status("RI_WSG_STATE", False) 
+if (i_WSG_State == 256):
+  global s_WSG_State = "Idle"
+elif (i_WSG_State == 512):
+  global s_WSG_State = "Gripping"
+elif (i_WSG_State == 1024):
+  global s_WSG_State = "No Part"
+elif (i_WSG_State == 2048):
+  global s_WSG_State = "Part Lost"
+elif (i_WSG_State == 4096):
+  global s_WSG_State = "Holding"
+elif (i_WSG_State == 8192):
+  global s_WSG_State = "Releasing"
+elif (i_WSG_State == 16384):
+  global s_WSG_State = "Positioning"
+elif (i_WSG_State == 32768):
+  global s_WSG_State = "Error"
+end

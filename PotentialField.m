@@ -36,16 +36,16 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
     nrLinks   = 6;
     dhgoal = DHTransformation(C_goal, 6);
     G = subs(dhgoal, [Q1 Q2 Q3 Q4 Q5 Q6], params.goal);
-    G = eval(G(1:3,4));
+    G = eval(G)*p;
+    G = G(1:3,1);
         
-    while mp.vidAtGoal <= 0 && iter < 80 %%iter <= params.maxiteration
+    while mp.vidAtGoal <= 0 && iter <= params.maxiteration
         %for i = 1:nrLinks
-         %   for j = 1:i
-               %Jacobian... 
+          %  for j = 1:i
+                ...
           %  end
         %end
-        
-        
+                
         dhvid  = DHTransformation(mp.nodes(vid, :), 6);
         pp = dhvid*p;
         pp = pp(1:3);
@@ -56,15 +56,11 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
         J = double(subs(J,[Q1 Q2 Q3 Q4 Q5 Q6], mp.nodes(vid, :)));
         
         Psub = subs(pp, [Q1 Q2 Q3 Q4 Q5 Q6], mp.nodes(vid, :));
-        G;
-        eval(Psub);
-        d = G - eval(Psub)
-        d = d/norm(d)
+        d = G - eval(Psub);
+        d = d/norm(d);
         u = J'*d;
         u = u*dstep;
         params.robot = mp.nodes(vid, :) + u'; % New configuration
-        disp(params.robot);
-        %disp(d); 
         
         n                     = size(mp.nodes,1);
         mp.nchildren(vid)     = mp.nchildren(vid) + 1;
@@ -77,25 +73,6 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
             return;
         end
         
-        %{
-        for k = 1:nrSteps
-            params.robot = mp.nodes(vid, :) + u;
-            if IsValidState() == 0
-                return;
-            end
-            n                     = size(mp.nodes,1);
-            mp.nchildren(vid)     = mp.nchildren(vid) + 1;
-            mp.nodes(n + 1, :)    = params.robot;
-            mp.parents(n + 1)     = vid;
-            mp.nchildren(n + 1)   = 0;
-
-            if HasRobotReachedGoal() == 1
-                mp.vidAtGoal = n + 1;
-                return;
-            end
-            vid = n + 1;
-        end
-        %}
         iter = iter + 1;
         vid = vid + 1;
         if mod(iter, 20) == 0
@@ -104,21 +81,10 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
     end
 
     if mp.vidAtGoal >= 1
-        %JointTrajectory = mp.nodes;
         JointTrajectory  = MPGetPath();
         JointTrajectory_smooth = SmoothPath(JointTrajectory);
     end
     %output the output moves
     OutputMovesForUR(JointTrajectory_smooth, 'PotentialField.script');
-    Draw(JointTrajectory_smooth);
-    
-    
-    
-    %function J = Jacobian(P, theta)
-     %   syms Q1 Q2 Q3 Q4 Q5 Q6
-      %  J = [diff(P, Q1) diff(P, Q2) diff(P, Q3) diff(P, Q4) diff(P, Q5) diff(P, Q6)];
-      %  J = double(subs(J,[Q1 Q2 Q3 Q4 Q5 Q6], [theta(1) theta(2) theta(3) theta(4) theta(5) theta(6)]));
-   % end
-    
-    
+    Draw(JointTrajectory_smooth);    
 end

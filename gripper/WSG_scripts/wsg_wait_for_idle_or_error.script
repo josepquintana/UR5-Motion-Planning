@@ -1,0 +1,3 @@
+while (not(modbus_get_signal_status("RI_WSG_STATE", False) ==256 or modbus_get_signal_status("RI_WSG_STATE", False) == 32768)):
+  sync()
+end

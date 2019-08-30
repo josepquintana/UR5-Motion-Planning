@@ -1,0 +1,180 @@
+def WSGexample():
+  modbus_add_signal("192.168.1.20", 255, 0, 2, "RI_WSG_STATE")
+  modbus_set_signal_update_frequency("RI_WSG_STATE", 25)
+  modbus_add_signal("192.168.1.20", 255, 0, 3, "RO_WSG_CMDFLAGS")
+  modbus_set_signal_update_frequency("RO_WSG_CMDFLAGS", 25)
+  modbus_add_signal("192.168.1.20", 255, 1, 3, "RO_WSG_WIDTH")
+  modbus_set_signal_update_frequency("RO_WSG_WIDTH", 25)
+  modbus_add_signal("192.168.1.20", 255, 2, 3, "RO_WSG_SPEED")
+  modbus_set_signal_update_frequency("RO_WSG_SPEED", 25)
+  modbus_add_signal("192.168.1.20", 255, 3, 3, "RO_WSG_FORCELIM")
+  modbus_set_signal_update_frequency("RO_WSG_FORCELIM", 25)
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 0)
+  set_analog_outputdomain(1, 0)
+  set_tool_voltage(0)
+  modbus_set_runstate_dependent_choice("RO_WSG_CMDFLAGS",0)
+  modbus_set_runstate_dependent_choice("RO_WSG_WIDTH",0)
+  modbus_set_runstate_dependent_choice("RO_WSG_SPEED",0)
+  modbus_set_runstate_dependent_choice("RO_WSG_FORCELIM",0)
+  set_tcp(p[0.0,0.0,0.0,0.0,0.0,0.0])
+  set_payload(0.0)
+  set_gravity([0.0, 0.0, 9.82])
+  def WSG_Stop():
+    modbus_set_output_register("RO_WSG_CMDFLAGS", 4096, False)
+    sleep(0.2)
+    
+  end
+  def WSG_Home():
+    modbus_set_output_register("RO_WSG_CMDFLAGS", 2048, False)
+    sleep(1.0)
+  end
+  def WSG_Wait_Idle():
+    while (not(modbus_get_signal_status("RI_WSG_STATE", False) ==256)):
+    sync()
+    end
+  end
+  def WSG_Wait_Id_Err():
+    while (not(modbus_get_signal_status("RI_WSG_STATE", False) ==256 or modbus_get_signal_status("RI_WSG_STATE", False) == 32768)):
+    sync()
+    end
+  end
+  def WSG_Wait_Gr_Fin():
+    while (not((modbus_get_signal_status("RI_WSG_STATE", False) ==4096) or (modbus_get_signal_status("RI_WSG_STATE", False) ==2048) or (modbus_get_signal_status("RI_WSG_STATE", False) ==1024))):
+    sync()
+    end
+  end
+  def WSG_Move():
+    modbus_set_output_register("RO_WSG_WIDTH", i_WSG_Pos, False)
+    modbus_set_output_register("RO_WSG_SPEED", i_WSG_Speed, False)
+    modbus_set_output_register("RO_WSG_FORCELIM", i_WSG_Force, False)
+    sleep(0.2)
+    modbus_set_output_register("RO_WSG_CMDFLAGS", 256, False)
+    sleep(0.2)
+  end
+  def WSG_Grip():
+    modbus_set_output_register("RO_WSG_WIDTH", i_WSG_Pos, False)
+    modbus_set_output_register("RO_WSG_SPEED", i_WSG_Speed, False)
+    modbus_set_output_register("RO_WSG_FORCELIM", i_WSG_Force, False)
+    sleep(0.5)
+    modbus_set_output_register("RO_WSG_CMDFLAGS", 512, False)
+    sleep(0.2)
+  end
+  def WSG_Release():
+    modbus_set_output_register("RO_WSG_WIDTH", i_WSG_Pos, False)
+    modbus_set_output_register("RO_WSG_SPEED", i_WSG_Speed, False)
+    sleep(0.2)
+    modbus_set_output_register("RO_WSG_CMDFLAGS", 1024, False)
+    sleep(0.2)
+  end
+  def WSG_Get_State():
+    i_WSG_State = modbus_get_signal_status("RI_WSG_STATE", False)
+    if (i_WSG_State == 256):
+    global s_WSG_State = "Idle"
+    elif (i_WSG_State == 512):
+    global s_WSG_State = "Gripping"
+    elif (i_WSG_State == 1024):
+    global s_WSG_State = "No Part"
+    elif (i_WSG_State == 2048):
+    global s_WSG_State = "Part Lost"
+    elif (i_WSG_State == 4096):
+    global s_WSG_State = "Holding"
+    elif (i_WSG_State == 8192):
+    global s_WSG_State = "Releasing"
+    elif (i_WSG_State == 16384):
+    global s_WSG_State = "Positioning"
+    elif (i_WSG_State == 32768):
+    global s_WSG_State = "Error"
+    end
+  end
+  def WSG_Fast_Stop():
+    modbus_set_output_register("RO_WSG_CMDFLAGS", 8192, False)
+    sleep(0.2)
+    
+  end
+  def WSG_Init():
+    s_ip = "192.168.1.20"
+    modbus_add_signal(s_ip, 255, 0, 2, "RI_WSG_STATE")
+    modbus_set_signal_update_frequency("RI_WSG_STATE", 50)
+    modbus_add_signal(s_ip, 255, 0, 3, "RO_WSG_CMDFLAGS")
+    modbus_set_signal_update_frequency("RO_WSG_CMDFLAGS", 50)
+    modbus_add_signal(s_ip, 255, 1, 3, "RO_WSG_WIDTH")
+    modbus_set_signal_update_frequency("RO_WSG_WIDTH", 50)
+    modbus_add_signal(s_ip, 255, 2, 3, "RO_WSG_SPEED")
+    modbus_set_signal_update_frequency("RO_WSG_SPEED", 50)
+    modbus_add_signal(s_ip, 255, 3, 3, "RO_WSG_FORCELIM")
+    modbus_set_signal_update_frequency("RO_WSG_FORCELIM", 125)
+    modbus_set_runstate_dependent_choice("RO_WSG_CMDFLAGS",0)
+    modbus_set_runstate_dependent_choice("RO_WSG_WIDTH",0)
+    modbus_set_runstate_dependent_choice("RO_WSG_SPEED",0)
+    modbus_set_runstate_dependent_choice("RO_WSG_FORCELIM",0)
+    global i_WSG_Pos=1000
+    global i_WSG_Speed=5000
+    global i_WSG_Force=5000
+    global s_WSG_State = "Idle"
+  end
+  $ 1 "BeforeStart"
+  $ 2 "i_WSG_Pos≔0"
+  global i_WSG_Pos=0
+  $ 3 "i_WSG_Speed≔5000"
+  global i_WSG_Speed=5000
+  $ 4 "i_WSG_Force≔2000"
+  global i_WSG_Force=2000
+  $ 5 "s_WSG_State≔'Idle'"
+  global s_WSG_State="Idle"
+  $ 6 "Call WSG_Stop"
+  WSG_Stop()
+  $ 7 "Call WSG_Wait_Idle"
+  WSG_Wait_Idle()
+  $ 8 "Call WSG_Home"
+  WSG_Home()
+  $ 9 "Call WSG_Wait_Idle"
+  WSG_Wait_Idle()
+  while (True):
+    $ 10 "Robot Program"
+    $ 11 "Call WSG_Stop"
+    WSG_Stop()
+    $ 12 "Call WSG_Wait_Idle"
+    WSG_Wait_Idle()
+    $ 13 "i_WSG_Pos≔1500"
+    global i_WSG_Pos=1500
+    $ 14 "i_WSG_Speed≔5000"
+    global i_WSG_Speed=5000
+    $ 15 "Call WSG_Move"
+    WSG_Move()
+    $ 16 "Call WSG_Wait_Idle"
+    WSG_Wait_Idle()
+    $ 17 "i_WSG_Pos≔1000"
+    global i_WSG_Pos=1000
+    $ 18 "i_WSG_Speed≔5000"
+    global i_WSG_Speed=5000
+    $ 19 "i_WSG_Force≔2000"
+    global i_WSG_Force=2000
+    $ 20 "Call WSG_Grip"
+    WSG_Grip()
+    $ 21 "Call WSG_Wait_Gr_Fin"
+    WSG_Wait_Gr_Fin()
+    $ 22 "Call WSG_Get_State"
+    WSG_Get_State()
+    $ 23 "If s_WSG_State≟'Holding'"
+    if (s_WSG_State =="Holding"):
+      $ 24 "Wait: 1.0"
+      sleep(1.0)
+      $ 25 "i_WSG_Pos≔2000"
+      global i_WSG_Pos=2000
+      $ 26 "i_WSG_Speed≔5000"
+      global i_WSG_Speed=5000
+      $ 27 "Call WSG_Release"
+      WSG_Release()
+    else:
+      $ 28 "Else"
+      $ 29 "Call WSG_Release"
+      WSG_Release()
+    end
+    $ 30 "Call WSG_Wait_Id_Err"
+    WSG_Wait_Id_Err()
+  end
+end
