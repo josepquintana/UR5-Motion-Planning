@@ -1,0 +1,2 @@
+modbus_set_output_register("RO_WSG_CMDFLAGS", 2048, False)
+sleep(1.0)

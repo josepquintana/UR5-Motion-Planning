@@ -1,0 +1,34 @@
+ Program
+   BeforeStart
+     i_WSG_Pos≔0
+     i_WSG_Speed≔5000
+     i_WSG_Force≔2000
+     s_WSG_State≔"Idle"
+     Call WSG_Stop
+     Call WSG_Wait_Idle
+     Call WSG_Home
+     Call WSG_Wait_Idle
+   Robot Program
+     <empty>
+   WSG_Stop
+     Script: wsg_stop.script
+   WSG_Home
+     Script: wsg_home.script
+   WSG_Wait_Idle
+     Script: wsg_wait_for_idle.script
+   WSG_Wait_Id_Err
+     Script: wsg_wait_for_idle_or_error.script
+   WSG_Wait_Gr_Fin
+     Script: wsg_wait_for_grip_finished.script
+   WSG_Move
+     Script: wsg_move.script
+   WSG_Grip
+     Script: wsg_grip.script
+   WSG_Release
+     Script: wsg_release.script
+   WSG_Get_State
+     Script: wsg_get_state.script
+   WSG_Fast_Stop
+     Script: wsg_fast_stop.script
+   WSG_Init
+     Script: wsg_init.script

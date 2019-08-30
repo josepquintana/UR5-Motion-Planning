@@ -35,12 +35,13 @@ function [JointTrajectory, JointTrajectory_smooth] = PotentialField(C_ini, C_goa
     nrLinks   = 6;
     dhgoal = DHTransformation(C_goal, 6);
     G = subs(dhgoal, [Q1 Q2 Q3 Q4 Q5 Q6], params.goal);
-    G = eval(G(1:3,4));
+    G = eval(G)*p;
+    G = G(1:3,1);
         
     while mp.vidAtGoal <= 0 && iter <= params.maxiteration
         %for i = 1:nrLinks
           %  for j = 1:i
-            
+            % ...
           %  end
         %end
                 

@@ -1,46 +1,57 @@
-# UR5 Kinematics and Display
-![image of figure window](https://raw.githubusercontent.com/pradeepunique1989/UR5Display/master/docs/image.png)
+# Final Project - SDU Robotics Summer Course
+Implementation of two motion planning algorithms:
+	- Rapidly-exploring Random Tree (RRT)
+	- Potential Field
 
-This repository contains two MATLAB classes.
-1) UR5Display : A class to visualize a robot model using the corresponding STL files.
-2) UR5Kinematics : A wrapper class to compute forward and inverse kinematics solutions via a MEX interface to C++ code.
+![image of simulation window](docs/image2.png)
+	
+Both algorithms find collision-free paths for the UR5 robotic arm ([Universal Robots site](https://www.universal-robots.com/3d/ur5.html)) to perform pick-and-place tasks.
 
-There are many ways to visualize a robot model in MATLAB.
-This class does it efficiently by utilizing graphics objects provided by MATLAB.
-The key advantage is that the robot model can be efficiently articulated by either the callback function or a call to draw_configuration.
+Scripts *MPExtendRRT.m* and *PotentialField.m* display a simulation of the UR5 robot following the path found and the obstacles defined.
 
-I hope this class is of use to anyone wanting to:
-1) Visualize the pose of an UR5 robot.
-2) Visualize and manipulate STL objects efficiently from within MATLAB.
+A *\*.script* output file is generated with the commands for the real UR5 robot. 
+Example:
+```
+...
+movej([-0.83856, -1.96147, -1.06408, -1.06838, 1.58115, -1.01197], a=1, v=1, t=0, r=0)
+movej([-0.834858, -2.04677, -1.06577, -1.07883, 1.61465, -0.997554], a=1, v=1, t=0, r=0)
+movej([-0.860245, -2.12685, -1.0378, -1.09263, 1.64701, -0.967192], a=1, v=1, t=0, r=0)
+movej([-0.83583, -2.1846, -1.08443, -1.11736, 1.62908, -1.02161], a=1, v=1, t=0, r=0)
+...
+```
 
-## Credits
-I am grateful to the authors of the following packages:
+![image of real robot following the generated path](docs/image3.png)
 
-1) Example MATLAB class wrapper for a C++ class by Oliver Woodford
-https://www.mathworks.com/matlabcentral/fileexchange/38964-example-matlab-class-wrapper-for-a-c-class
+[Video](https://josepquintana.me/files/videos/UR5/UR5%20robot%20motion%20planning%20-%20RRT%20algorithm.mp4) of the real UR5 robot following the generated path using the RRT algorithm
 
-2) stlTools by Pau Micó
-https://www.mathworks.com/matlabcentral/fileexchange/51200-stltools?focused=3878420&tab=function
 
-3) universal_robot package by Kelsey Hawkins (kphawkins@gatech.edu)
-https://github.com/ros-industrial/universal_robot/tree/kinetic-devel/ur_kinematics
+### Usage
+Set up a a MEX compiler:
+```
+mex -setup C++
+```
 
-## Usage
-1) Download or clone this repo into your folder.
-2) Run the script "run_me.m".
-3) Star this repo if you like it.
+Initialize toolbox parameters:
+```
+run_me
+```
 
-## Some tips
-1) You need to have set a MEX compiler for this to work (run:   mex -setup C++   in Command Window)
-2) This was tested in MATLAB 2018b. But, it should work for any recent version of MATLAB.
+Load demo variables (optional):
+```
+load demo_vars.mat
+```
 
-## Author
+Run motion planning algorithm:
+```
+MPExtendRRT(initial_configuration, goal_configuration, obstacles)  
+PotentialField(initial_configuration, goal_configuration, obstacles)  
+```
 
-**Pradeep Rajendran**
+*initial_configuration* is the initial configuration of UR5 (dimension: 1\*6, unit: radian)  
 
-* [github/pradeepr-roboticist](https://github.com/pradeepr-roboticist)
+*goal_configuration* is the goal configuration of UR5 (dimension: 1\*6, unit: radian)  
 
-## License
+*obstacles* represents all the capsule obstacles in the workspace (dimension: n\*7)  
+format of each row of *obstacles*: \[P_ini,  P_end,  r\] where P_ini is the x-, y- and z- coordinates of the initial point of the interal line segment of the capsule (diemsion: 1\*3 unit: meter), P_end is the x-, y- and z- coordinates of the end point of the interal line segment of the capsule (diemsion: 1\*3 unit: meter), r is the radius of the capsule (scalar, unit: meter)  
 
-Copyright © 2019 [Pradeep Rajendran](https://github.com/pradeepr-roboticist)
-Released under the [GNU General Public License](https://github.com/pradeepr-roboticist/UR5Robot-MEX-Matlab/blob/master/LICENSE).
+ 
