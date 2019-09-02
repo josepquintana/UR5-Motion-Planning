@@ -54,6 +54,6 @@ PotentialField(initial_configuration, goal_configuration, obstacles)
 *goal_configuration* is the goal configuration of UR5 (dimension: 1\*6, unit: radian)  
 
 *obstacles* represents all the capsule obstacles in the workspace (dimension: n\*7)  
-  format of each row of *obstacles*: \[P_ini,  P_end,  r\] where P_ini is the x-, y- and z- coordinates of the initial point of the       interal line segment of the capsule (diemsion: 1\*3 unit: meter), P_end is the x-, y- and z- coordinates of the end point of the         interal   line segment of the capsule (diemsion: 1\*3 unit: meter), r is the radius of the capsule (scalar, unit: meter)  
+format of each row of *obstacles*: \[P_ini,  P_end,  r\] where P_ini is the x-, y- and z- coordinates of the initial point of the       interal line segment of the capsule (diemsion: 1\*3 unit: meter), P_end is the x-, y- and z- coordinates of the end point of the         interal   line segment of the capsule (diemsion: 1\*3 unit: meter), r is the radius of the capsule (scalar, unit: meter)  
 
  
