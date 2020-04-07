@@ -1011,9 +1011,9 @@ multidimensional case.
 
     // Create 2 matrices using tensors of rank 2
     Eigen::Tensor<int, 2> a(2, 3);
-    a.setValues({{1, 2, 3}, {6, 5, 4}});
+    a.setValues(({1, 2, 3}, {6, 5, 4}));
     Eigen::Tensor<int, 2> b(3, 2);
-    b.setValues({{1, 2}, {4, 5}, {5, 6}});
+    b.setValues(({1, 2}, {4, 5}, {5, 6}));
 
     // Compute the traditional matrix product
     Eigen::array<Eigen::IndexPair<int>, 1> product_dims = { Eigen::IndexPair<int>(1, 0) };
@@ -1063,7 +1063,7 @@ Example: Reduction along one dimension.
 
     // Create a tensor of 2 dimensions
     Eigen::Tensor<int, 2> a(2, 3);
-    a.setValues({{1, 2, 3}, {6, 5, 4}});
+    a.setValues(({1, 2, 3}, {6, 5, 4}));
     // Reduce it along the second dimension (1)...
     Eigen::array<int, 1> dims({1 /* dimension to reduce */});
     // ...using the "maximum" operator.
@@ -1189,7 +1189,7 @@ dd a comment to this line
 
     // Create a tensor of 2 dimensions
     Eigen::Tensor<int, 2> a(2, 3);
-    a.setValues({{1, 2, 3}, {4, 5, 6}});
+    a.setValues(({1, 2, 3}, {4, 5, 6}));
     // Scan it along the second dimension (1) using summation
     Eigen::Tensor<int, 2> b = a.cumsum(1);
     // The result is a tensor with the same size as the input
