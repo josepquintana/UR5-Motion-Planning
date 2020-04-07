@@ -1,7 +1,7 @@
 # Final Project - SDU Robotics Summer Course
 Implementation of two motion planning algorithms:
-	- Rapidly-exploring Random Tree (RRT)
-	- Potential Field
+- Rapidly-exploring Random Tree (RRT)
+- Potential Field
 
 The project report can be found [here](Report.pdf)
 
