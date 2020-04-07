@@ -901,7 +901,7 @@ You can use cast() to lift this restriction.  For example this computes
 cubic roots of an int Tensor:
 
     Eigen::Tensor<int, 2> a(2, 3);
-    a.setValues({{0, 1, 8}, {27, 64, 125}});
+    a.setValues(({0, 1, 8}, {27, 64, 125}));
     Eigen::Tensor<double, 2> b = a.cast<double>().pow(1.0 / 3.0);
     cout << "a" << endl << a << endl << endl;
     cout << "b" << endl << b << endl << endl;
