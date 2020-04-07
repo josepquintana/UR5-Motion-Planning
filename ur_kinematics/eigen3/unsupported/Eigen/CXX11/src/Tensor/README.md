@@ -5,6 +5,8 @@ but more complex types such as strings are also supported.
 
 [TOC]
 
+{% raw %}
+
 ## Tensor Classes
 
 You can manipulate a tensor with one of the following classes.  They all are in
@@ -660,7 +662,7 @@ contains 2 lists of 3 floats each.
 call.
 
     Eigen::Tensor<float, 2> a(2, 3);
-    a.setValues(({0.0f, 1.0f, 2.0f}, {3.0f, 4.0f, 5.0f}));
+    a.setValues({{0.0f, 1.0f, 2.0f}, {3.0f, 4.0f, 5.0f}});
     cout << "a" << endl << a << endl << endl;
     =>
     a
@@ -901,7 +903,7 @@ You can use cast() to lift this restriction.  For example this computes
 cubic roots of an int Tensor:
 
     Eigen::Tensor<int, 2> a(2, 3);
-    a.setValues(({0, 1, 8}, {27, 64, 125}));
+    a.setValues({{0, 1, 8}, {27, 64, 125}});
     Eigen::Tensor<double, 2> b = a.cast<double>().pow(1.0 / 3.0);
     cout << "a" << endl << a << endl << endl;
     cout << "b" << endl << b << endl << endl;
@@ -1011,9 +1013,9 @@ multidimensional case.
 
     // Create 2 matrices using tensors of rank 2
     Eigen::Tensor<int, 2> a(2, 3);
-    a.setValues(({1, 2, 3}, {6, 5, 4}));
+    a.setValues({{1, 2, 3}, {6, 5, 4}});
     Eigen::Tensor<int, 2> b(3, 2);
-    b.setValues(({1, 2}, {4, 5}, {5, 6}));
+    b.setValues({{1, 2}, {4, 5}, {5, 6}});
 
     // Compute the traditional matrix product
     Eigen::array<Eigen::IndexPair<int>, 1> product_dims = { Eigen::IndexPair<int>(1, 0) };
@@ -1063,7 +1065,7 @@ Example: Reduction along one dimension.
 
     // Create a tensor of 2 dimensions
     Eigen::Tensor<int, 2> a(2, 3);
-    a.setValues(({1, 2, 3}, {6, 5, 4}));
+    a.setValues({{1, 2, 3}, {6, 5, 4}});
     // Reduce it along the second dimension (1)...
     Eigen::array<int, 1> dims({1 /* dimension to reduce */});
     // ...using the "maximum" operator.
@@ -1189,7 +1191,7 @@ dd a comment to this line
 
     // Create a tensor of 2 dimensions
     Eigen::Tensor<int, 2> a(2, 3);
-    a.setValues(({1, 2, 3}, {4, 5, 6}));
+    a.setValues({{1, 2, 3}, {4, 5, 6}});
     // Scan it along the second dimension (1) using summation
     Eigen::Tensor<int, 2> b = a.cumsum(1);
     // The result is a tensor with the same size as the input
@@ -1739,6 +1741,7 @@ but you can easily cast the tensors to floats to do the division:
 
 TODO
 
+{% endraw %}
 
 ## Representation of scalar values
 
@@ -1756,5 +1759,4 @@ product of 2 1d tensors (through contractions) returns a 0d tensor.
 *   Complex and integer values are known to be broken on GPUs. If you try to use
     them you'll most likely end up triggering a static assertion failure such as
     EIGEN_STATIC_ASSERT(packetSize > 1, YOU_MADE_A_PROGRAMMING_MISTAKE)
-
 
